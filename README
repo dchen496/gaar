@@ -1,0 +1,6 @@
+INSTALLATION
+1. generate ssh keys, put them in keys folder (name must be id_rsa)
+2. change app name in manifest.yml and install.sh's if needed 
+3. vmc target <somewhere>
+4. ./install.sh
+

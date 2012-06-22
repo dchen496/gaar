@@ -1,0 +1,15 @@
+<p>
+Gerrit server configuration set. <br />
+Host: <%= @c.host %><br />
+Port: <%= @c.port %><br />
+User: <%= @c.user %><br />
+Interval: <%= @c.interval %><br />
+Enabled: <%= @c.enable.to_s %><br />
+<%= 
+  if @errors.nil?
+    "<a href=\"/\">Return to index </a>"
+  else
+    "<a href=\"/setserverform\">Return to server configuration </a>"
+  end
+%>
+</p>

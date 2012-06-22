@@ -1,0 +1,16 @@
+--- 
+applications: 
+  .: 
+    services: 
+      mysql-c16be: 
+        type: mysql
+    url: ${name}.${target-base}
+    instances: 1
+    name: gaar
+    mem: 128M
+    framework: 
+      name: sinatra
+      info: 
+        description: Sinatra Application
+        mem: 128M
+        exec: ruby web.rb

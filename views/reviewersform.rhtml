@@ -1,0 +1,53 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+      $("#reviewerform_edit").click(function(event){
+        $.get('/projectreviewers',
+          {project: $("#reviewerform_select").val()},
+          function(data){$("#reviewerform_textarea").val(data)}
+        )
+        $("#reviewerform_projectname").text($("#reviewerform_select").val())
+        $("#reviewerform_project").show()
+        event.preventDefault()
+      });
+
+      function reviewerform_hide(){
+        $("#reviewerform_textarea").val('')
+        $("#reviewerform_projectname").empty()
+        $("#reviewerform_project").hide()
+      }
+
+      $("#reviewerform_save").click(function(event){
+        $.get('/projectreviewers',
+          {project: $("#reviewerform_select").val(),
+           reviewers: $("#reviewerform_textarea").val()})
+        reviewerform_hide()
+        event.preventDefault()
+      });
+
+      $("#reviewerform_discard").click(function(event){
+        reviewerform_hide()
+        event.preventDefault()
+      });
+      
+  });
+</script>
+<h2>Edit project reviewers</h2>
+<p>
+<form>
+  Project: <select id="reviewerform_select" >
+    <% @gerrit.ls_projects.each do |name| %>
+      <option value="<%= name %>"><%= name %></option>
+    <% end %>
+  </select>
+  <input type="submit" id="reviewerform_edit" value="Edit" /><br />
+  <div id="reviewerform_project" style="display:none">
+    Editing reviewers for <span id="reviewerform_projectname"></span><br />
+    (enter comma-separated emails or usernames)<br />
+    <textarea id="reviewerform_textarea" cols="60" rows="10"></textarea><br />
+    <input type="submit" id="reviewerform_save" value="Save" />
+    <input type="submit" id="reviewerform_discard" value="Discard" /><br />
+  </div>
+</form>
+</p>
+<p>
+
