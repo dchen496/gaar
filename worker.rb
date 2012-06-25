@@ -39,7 +39,9 @@ class Worker
       #    at a time when condition #1 was satisfied
       # 4. never had reviewers added before
       changes = gerrit.query "project:\"#{project.name}\" status:open Verified=1 --all-approvals --commit-message" 
+      changes ||= []
       changes.each do |change|
+        change['id'] ||= ''
         $log.debug "change: #{change['id']}"
 
         if !Change.where(changeid:change['id']).first.nil?
@@ -47,13 +49,16 @@ class Worker
           next
         end
 
+        change['commitMessage'] ||= ''
         if change['commitMessage'] =~ /\bWIP\b/
           $log.debug "change is WIP, skipping"
           next
         end
 
         approvals = []
+        change['patchSets'] ||= []
         change['patchSets'].each do |patchset|
+          patchset['approvals'] ||= []
           approvals += patchset['approvals']
         end
         has_code_reviews = approvals.any? do |approval|
