@@ -3,17 +3,44 @@
 Private key and HTTP password are not shown. Leaving a field blank leaves it unchanged.<br />
 <form method="get" action="/setserver">
   <table>
-  <tr><td>Public key: </td><td><textarea rows="10" cols="60" name="publickey"><%=@c.publickey%></textarea></td></tr>
-  <tr><td>Private key: </td><td><textarea rows="10" cols="60" name="privatekey"></textarea></td></tr>
-  <tr><td>Hostname: </td><td><input type="text" name="host" value="<%= @c.host %>" /></td></tr>
-  <tr><td>Port: </td><td><input type="text" name="port" value="<%= @c.port %>" /></td></tr>
-  <tr><td>Username: </td><td><input type="text" name="user" value="<%= @c.user %>" /></td></tr>
-  <tr><td>HTTP username: </td><td><input type="text" name="httpuser" value="<%= @c.httpuser %>" /></td></tr>
-  <tr><td>HTTP password: </td><td><input type="password" name="httppass" /></td></tr>
-  <tr><td>Polling interval (sec): </td><td><input type="text" name="interval" value="<%= @c.interval %>" /></td></tr>
-  <tr><td>Enable: </td><td><input type="checkbox" name="check[]" value="enable" <%= @c.enable ? 'checked="yes"' : nil  %> /></td></tr>
+    <tr>
+      <td>Public key: </td>
+      <td><textarea rows="10" cols="60" name="publickey"><%= @c.publickey %></textarea></td>
+    </tr>
+    <tr>
+      <td>Private key: </td>
+      <td><textarea rows="10" cols="60" name="privatekey"></textarea></td>
+    </tr>
+    <tr>
+      <td>Hostname: </td>
+      <td><input type="text" name="host" value="<%= @c.host %>" /></td>
+    </tr>
+    <tr>
+      <td>Port: </td>
+      <td><input type="text" name="port" value="<%= @c.port %>" /></td>
+    </tr>
+    <tr>
+      <td>Username: </td>
+      <td><input type="text" name="user" value="<%= @c.user %>" /></td>
+    </tr>
+    <tr>
+      <td>HTTP username: </td>
+      <td><input type="text" name="httpuser" value="<%= @c.httpuser %>" /></td>
+    </tr>
+    <tr>
+      <td>HTTP password: </td>
+      <td><input type="password" name="httppass" /></td>
+    </tr>
+    <tr>
+      <td>Polling interval (sec): </td>
+      <td><input type="text" name="interval" value="<%= @c.interval %>" /></td>
+    </tr>
+    <tr>
+      <td>Enable: </td>
+      <td><input type="checkbox" name="check[]" value="enable" <%= @c.enable ? 'checked="yes"' : nil  %> /></td>
+    </tr>
   </table>
-  <input type="submit" value="Set" /> 
+  <input type="submit" value="Set" />
 </form>
 </p>
 

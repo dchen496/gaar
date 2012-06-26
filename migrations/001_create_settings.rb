@@ -17,7 +17,15 @@ class CreateSettings < ActiveRecord::Migration
       t.boolean :enable
     end
 
-    Configuration.create port:29418, privatekey:IO.read('keys/id_rsa'), publickey:IO.read('keys/id_rsa.pub'), httpuser:'user', httppass:'pass', interval:120, enable:false
+    Configuration.create(
+      :port => 29418,
+      :privatekey => IO.read('keys/id_rsa'),
+      :publickey => IO.read('keys/id_rsa.pub'),
+      :httpuser => 'user',
+      :httppass => 'pass',
+      :interval => 120,
+      :enable => false
+    )
 
     create_table :projects do |t|
       t.string :name

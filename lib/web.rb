@@ -1,13 +1,11 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require 'sinatra'
 require 'json'
 
-require_relative 'log'
-require_relative 'remotegerrit'
-require_relative 'db'
-require_relative 'worker'
+require 'remotegerrit'
+require 'db'
+require 'worker'
 
 set :environment, :production
 
@@ -39,14 +37,16 @@ end
 get '/projectreviewers' do
   if @gerrit.is_project? params['project']
     begin
-      project = Project.where(name:params['project']).first!
+      project = Project.where(:name => params['project']).first!
     rescue
-      project = Project.new(name:params['project'])
+      project = Project.new(:name => params['project'])
     end
-    if !params['reviewers'].nil? && params != ''
+
+    if !params['reviewers'].nil?
       r = params['reviewers'].split(',')
       project.reviewers = r.map(&:strip)
       project.save!
+
     else
       if !project.reviewers.nil?
         project.reviewers.join(', ')
@@ -67,15 +67,18 @@ end
 
 get '/setserver' do
   @title = 'Configure Gerrit server'
-  params.each_pair do |key, value| 
+
+  params.each_pair do |key, value|
     next unless value.is_a? String
     value = value.strip
     if value == ''
       params[key] = nil
     end
   end
-  @c.publickey = params['publickey'] ? params['publickey'].gsub(/\r\n?/, "\n") : @c.publickey
-  @c.privatekey = params['privatekey'] ? params['privatekey'].gsub(/\r\n?/, "\n") : @c.privatekey
+  @c.publickey = params['publickey'].
+    gsub(/\r\n?/, "\n") if params['publickey']
+  @c.privatekey = params['privatekey'].
+    gsub(/\r\n?/, "\n") if params['privatekey']
   @c.host = params['host'] || @c.host
   @c.port = params['port'] || @c.port
   @c.user = params['user'] || @c.user
@@ -83,16 +86,15 @@ get '/setserver' do
   @c.httppass = params['httppass'] || @c.httppass
   @c.interval = params['interval'] ? params['interval'].to_i : @c.interval
   @c.enable = !params['check'].nil?
-  begin
-    @c.save!
-  rescue
-  end
+
+  @c.save
+
   begin
   @gerrit = RemoteGerrit.new(@c.host, @c.port, @c.user, @c.privatekey)
   rescue
     @errors = "Current server configuration is not valid."
-  else
   end
+
   erb :setserver
 end
 
@@ -100,11 +102,9 @@ after do
   ActiveRecord::Base.clear_active_connections!
 end
 
-Thread.new{
-  $log.info "thread running"
+Thread.new do
   worker = Worker.new
   while true
     worker.task
   end
-}
-
+end

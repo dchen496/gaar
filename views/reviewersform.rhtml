@@ -28,7 +28,7 @@
         reviewerform_hide()
         event.preventDefault()
       });
-      
+
   });
 </script>
 <h2>Edit project reviewers</h2>
@@ -41,8 +41,10 @@
   </select>
   <input type="submit" id="reviewerform_edit" value="Edit" /><br />
   <div id="reviewerform_project" style="display:none">
-    Editing reviewers for <span id="reviewerform_projectname"></span><br />
+    Editing reviewers for <span id="reviewerform_projectname"></span>
     (enter comma-separated emails or usernames)<br />
+    Clearing this field means no reviewers will be assigned
+    to the project's changes.<br />
     <textarea id="reviewerform_textarea" cols="60" rows="10"></textarea><br />
     <input type="submit" id="reviewerform_save" value="Save" />
     <input type="submit" id="reviewerform_discard" value="Discard" /><br />
