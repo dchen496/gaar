@@ -72,46 +72,46 @@ describe Worker do
                         :reviewers => ['reviewer'],
                         :destroy => nil)
     Project.stub(:find_each).and_yield(@projects[0]).and_yield(@projects[1])
-    @worker.task
+    @worker.add_reviewers
   end
 
   it "should not add reviewers to changes already done" do
-    @worker.task
+    @worker.add_reviewers
     @set_reviewers_count['done'].should eql nil
   end
 
   it "should not re-add changes that are done" do
-    @worker.task
+    @worker.add_reviewers
     @set_reviewers_count['done'].should eql nil
   end
 
   it "should not add reviewers to WIP changes" do
-    @worker.task
+    @worker.add_reviewers
     @set_reviewers_count['WIP'].should eql nil
   end
 
   it "should not add WIP changes to change database" do
-    @worker.task
+    @worker.add_reviewers
     @set_reviewers_count['WIP'].should eql nil
   end
 
   it "should not add reviewers to a change with reviews" do
-    @worker.task
+    @worker.add_reviewers
     @set_reviewers_count['hasreviews'].should eql nil
   end
 
   it "should add changes with reviews to the change database" do
-    @worker.task
+    @worker.add_reviewers
     @change_create_count['hasreviews'].should eql 1
   end
 
   it "should add reviewers to verified changes with no reviewers/WIP" do
-    @worker.task
+    @worker.add_reviewers
     @set_reviewers_count['ok'].should eql 1
   end
 
   it "should add changes that had reviewers added to the change database" do
-    @worker.task
+    @worker.add_reviewers
     @change_create_count['ok'].should eql 1
   end
 end

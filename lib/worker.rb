@@ -13,7 +13,7 @@ class Worker
     @log.level = Logger::WARN
   end
 
-  def task
+  def add_reviewers
     c = Configuration.first
     if !c.enable
       interval = c.interval
@@ -42,8 +42,10 @@ class Worker
         # 3. never had Code Reviews on any patchset
         #    at a time when condition #1 was satisfied
         # 4. never had reviewers added before
-          changes = gerrit.query %Q{project:"#{project.name}" status:open \
-  Verified=1 --all-approvals --commit-message}
+
+        command = %Q{project:"#{project.name}" status:open }
+        command << %Q{Verified=1 --all-approvals --commit-message}
+        changes = gerrit.query command
         changes.each do |change|
           change['id'] ||= ''
           @log.debug "change: #{change['id']}"
@@ -89,7 +91,7 @@ class Worker
 
   rescue Exception => e
     @log.error e.message
-    @log.error e.backtrace.inspect
+    @log.error e.backtrace.inspect if e.backtrace
     #don't flood the logs if the interval is undefined
     sleep interval ? interval : 90
   ensure

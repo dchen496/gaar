@@ -19,8 +19,8 @@ class CreateSettings < ActiveRecord::Migration
 
     Configuration.create(
       :port => 29418,
-      :privatekey => IO.read('keys/id_rsa'),
-      :publickey => IO.read('keys/id_rsa.pub'),
+      :privatekey => File.read('keys/id_rsa'),
+      :publickey => File.read('keys/id_rsa.pub'),
       :httpuser => 'user',
       :httppass => 'pass',
       :interval => 120,

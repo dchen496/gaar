@@ -30,13 +30,13 @@ class RemoteGerrit
   end
 
   def query(query)
-    r = command("gerrit query #{query} --format=json").
-      each_line.map { |line| JSON.parse line }
-    raise 'Invalid query' if r.last['type'] == 'error'
-    r[0..-2]
+    out = command("gerrit query #{query} --format=json")
+    objs = out.each_line.map { |line| JSON.parse line }
+    raise 'Invalid query' if objs.last['type'] == 'error'
+    objs[0..-2]
   end
 
-  def set_reviewers(project = nil, add, remove, changeid)
+  def set_reviewers(project, add, remove, changeid)
     s = "gerrit set-reviewers "
     s << "-p \"#{project}\" " unless project.nil?
     add.each { |r| s << "-a \"#{r}\" "}

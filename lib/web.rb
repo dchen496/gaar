@@ -75,10 +75,13 @@ get '/setserver' do
       params[key] = nil
     end
   end
-  @c.publickey = params['publickey'].
-    gsub(/\r\n?/, "\n") if params['publickey']
-  @c.privatekey = params['privatekey'].
-    gsub(/\r\n?/, "\n") if params['privatekey']
+
+  if params['publickey']
+    @c.publickey = params['publickey'].gsub(/\r\n?/, "\n")
+  end
+  if params['publickey']
+    @c.privatekey = params['privatekey'].gsub(/\r\n?/, "\n")
+  end
   @c.host = params['host'] || @c.host
   @c.port = params['port'] || @c.port
   @c.user = params['user'] || @c.user
@@ -105,6 +108,6 @@ end
 Thread.new do
   worker = Worker.new
   while true
-    worker.task
+    worker.add_reviewers
   end
 end
